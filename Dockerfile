@@ -24,10 +24,11 @@ COPY app.py .
 COPY voter_intentions_3000.csv .
 
 # Exponer puerto
-EXPOSE 8000
+EXPOSE 80
 
 # Variables de entorno
 ENV PYTHONUNBUFFERED=1
 
 # Comando para ejecutar la aplicación
+
 CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
