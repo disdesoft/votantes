@@ -220,7 +220,7 @@ async def startup_event():
     else:
         logger.error("✗ Error al entrenar el modelo")
 
-@app.get("/")
+@app.get("/api")
 def root():
     """Endpoint raíz"""
     return {
@@ -235,7 +235,7 @@ def root():
         }
     }
 
-@app.get("/health")
+@app.get("/api/health")
 def health_check():
     """Verificar estado del servicio"""
     return {
@@ -243,7 +243,7 @@ def health_check():
         "modelo_cargado": modelo is not None
     }
 
-@app.get("/info", response_model=ModeloInfo)
+@app.get("/api/info", response_model=ModeloInfo)
 def obtener_info():
     """Obtener información del modelo"""
     if modelo is None:
@@ -263,7 +263,7 @@ def obtener_info():
         total_entrenamiento=2400  # 80% de 3000
     )
 
-@app.post("/predecir", response_model=PrediccionOutput)
+@app.post("/api/predecir", response_model=PrediccionOutput)
 def predecir(votante: VotanteInput):
     """Predecir intención de voto"""
     if modelo is None:
@@ -293,7 +293,7 @@ def predecir(votante: VotanteInput):
         logger.error(f"Error en predicción: {str(e)}")
         raise HTTPException(status_code=400, detail=f"Error al procesar datos: {str(e)}")
 
-@app.post("/predecir_batch")
+@app.post("/api/predecir_batch")
 def predecir_batch(votantes: List[VotanteInput]):
     """Predecir múltiples votantes a la vez"""
     if modelo is None:
@@ -331,4 +331,5 @@ def predecir_batch(votantes: List[VotanteInput]):
 # ===========================================================
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(app, host="0.0.0.0", port=8000)
